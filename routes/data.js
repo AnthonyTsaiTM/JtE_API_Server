@@ -7,10 +7,14 @@ var database = require('../database');
 
 router.post('/reportview', function(req, res, next){
 	try{
+        console.log(req.body);
 		var system_names = req.body['system_names'];
 		var statuses = req.body['statuses'];
 		var datacenters = req.body['datacenters'];
 		var start_date = moment(req.body['start_date']).format('YYYY-MM-DD','YYYY-MM-DD');
+        if ((start_date > end_date) or (!moment(start_date).isValid()) or (!moment(end_date).isValid())) {
+            return res.send("date error");
+        }
 		var end_date = moment(req.body['end_date']).format('YYYY-MM-DD','YYYY-MM-DD');
 		var condition = '(datetime between \"' + start_date + '\" and \"' + end_date + "\") and 1=1 ";
 		var count = 0;
@@ -74,6 +78,7 @@ router.post('/reportview', function(req, res, next){
             res.send(err);
             res.end();
         } else {
+            console.log(data);
             res.send(data);
             res.end();
         }
