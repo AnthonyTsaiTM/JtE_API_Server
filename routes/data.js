@@ -3,6 +3,7 @@ var express = require('express');
 var mysql = require('mysql');
 var moment = require('moment');
 var router = express.Router();
+var database = require('../database');
 
 router.post('/reportview', function(req, res, next){
 	try{
@@ -69,25 +70,35 @@ router.post('/reportview', function(req, res, next){
     					WHERE "
     					+ condition +
     					" GROUP BY `DailyView`.`Name`;";
-    console.log(sql_query);
-	var connection = mysql.createConnection(config.params);
-	connection.connect(function(err){
-		if(err){
-		 	console.log(err);
-	    	console.log('Error connecting to Db');
-	    	res.send(err);
-	    	res.end();
-	  	}
-	});
-	connection.query(sql_query, function(err, rows, fields) {
-  		if (err) res.send(err.toString());
-  		var string = JSON.stringify(rows);
-  		var json =  JSON.parse(string);
-  		connection.end();
-  		// console.log(json);
-  		res.send(json);
-  		res.end();
-	});
+        database.queryDatabase(sql_query, function(err, data){
+        if (err) {
+            res.send(err);
+            res.end();
+        } else {
+            res.send(data);
+            res.end();
+        }
+
+    });
+});
+
+router.get('/lastupdatedate', function(req, res, next){
+    var sql_query = "select datetime from DailyCPU order by datetime desc limit 1;"
+    database.queryDatabase(sql_query, function(err, data){
+        if (err) {
+            res.send(err);
+            res.end();
+        } else {
+            try{
+                res.send(data[0]);
+                res.end();  
+            } catch(e) {
+                res.send('data parse error');
+                res.end();
+            }
+        }
+
+    });
 });
 
 
