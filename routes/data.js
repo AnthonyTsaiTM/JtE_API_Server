@@ -34,7 +34,7 @@ router.post('/reportview', function(req, res, next){
 		console.log(err);
 		return res.send("params error");
 	}
-	
+
 
 	var sql_query = "\
 					SELECT \
@@ -44,6 +44,7 @@ router.post('/reportview', function(req, res, next){
         				`DailyView`.`DefaultIp` AS `DefaultIp`,\
         				`DailyView`.`SystemName` AS `Systemname`,\
         				`DailyView`.`DataCenter` AS `DataCenter`,\
+								`DailyView`.`StorageType`,\
         				`DailyView`.`Status` AS `Status`,\
         				COUNT(DISTINCT `DailyView`.`datetime`) AS `Number_of_Days_CPU`,\
         				ROUND(((SUM(`DailyView`.`cpu_25`) / SUM(`DailyView`.`cputotal`)) * 100), 2) AS `CPU_LESSTHAN25`,\
@@ -95,7 +96,7 @@ router.get('/lastupdatedate', function(req, res, next){
         } else {
             try{
                 res.send(data[0]);
-                res.end();  
+                res.end();
             } catch(e) {
                 res.send('data parse error');
                 res.end();
