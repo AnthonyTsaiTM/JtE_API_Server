@@ -10,7 +10,7 @@ var users = require('./routes/users');
 var exportExcel = require('./routes/exportExcel');
 var download = require('./routes/download');
 var data = require('./routes/data');
-
+var physicaldata = require('./routes/physicalData');
 var app = express();
 
 // view engine setup
@@ -30,6 +30,7 @@ app.use('/', index);
 app.use('/csv/', exportExcel);
 app.use('/download/*', download);
 app.use('/data/', data);
+app.use('/physicalData/',physicaldata);
 // app.use('/download', download);
 
 // catch 404 and forward to error handler
