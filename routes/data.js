@@ -7,7 +7,7 @@ var database = require('../database');
 
 router.post('/reportview', function(req, res, next){
 	try{
-        console.log(req.body);
+    console.log(req.body);
 		var system_names = req.body['system_names'];
 		var statuses = req.body['statuses'];
 		var datacenters = req.body['datacenters'];
@@ -16,7 +16,9 @@ router.post('/reportview', function(req, res, next){
             return res.send("date error");
         }
 		var end_date = moment(req.body['end_date']).format('YYYY-MM-DD','YYYY-MM-DD');
+
 		var condition = '(datetime between \"' + start_date + '\" and \"' + end_date + "\") and 1=1 ";
+
 		var count = 0;
 		count = system_names.length;
 		if (count != 0) {
@@ -50,20 +52,23 @@ router.post('/reportview', function(req, res, next){
         				ROUND(((SUM(`DailyView`.`cpu_25`) / SUM(`DailyView`.`cputotal`)) * 100), 2) AS `CPU_LESSTHAN25`,\
         				ROUND(((SUM(`DailyView`.`cpu_75`) / SUM(`DailyView`.`cputotal`)) * 100),2) AS `CPU_BETWEEN25TO75`,\
         				ROUND(((SUM(`DailyView`.`cpu_100`) / SUM(`DailyView`.`cputotal`)) * 100), 2) AS `CPU_MORETHAN75`,\
-        				ROUND(AVG(`DailyView`.`cpu_avg`), 2) AS `CPU_Avg`,\
+
+								ROUND(AVG(`DailyView`.`cpu_avg`), 2) AS `CPU_Avg`,\
         				ROUND(MAX(`DailyView`.`cpu_max`), 2) AS `CPU_Max`,\
         				ROUND(MIN(`DailyView`.`cpu_min`), 2) AS `CPU_Min`,\
+
         				ROUND(((SUM(`DailyView`.`mem_25`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_LESSTHAN_25`,\
         				ROUND(((SUM(`DailyView`.`mem_75`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_BETWEEN25TO75`,\
         				ROUND(((SUM(`DailyView`.`mem_100`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_MORETHAN75`,\
         				ROUND((AVG(`DailyView`.`mem_avg`) * 100), 2) AS `Mem_Avg`,\
         				ROUND((MAX(`DailyView`.`mem_max`) * 100), 2) AS `Mem_Max`,\
         				ROUND((MIN(`DailyView`.`mem_min`) * 100), 2) AS `Mem_Min`,\
+
         				ROUND(AVG(`DailyView`.`disk_avg`), 0) AS `Disk_Avg`,\
         				ROUND(MAX(`DailyView`.`disk_max`), 0) AS `Disk_Max`,\
         				ROUND(MIN(`DailyView`.`disk_min`), 0) AS `Disk_Min`,\
         				SUM(IF(ISNULL(`DailyView`.`disk_avg`), 0, 1)) AS `Number_of_days_DISK`,\
-        				((SUM(IFNULL(`DailyView`.`disk_avg`, 0)) * 288) * 300) AS `Accumulate_DISK`,\
+        				(ROUND(AVG(`DailyView`.`disk_avg`), 0) * 288) * 300) AS `Accumulate_DISK`,\
         				ROUND(AVG(`DailyView`.`network_avg`), 0) AS `Network_Avg`,\
         				ROUND(MAX(`DailyView`.`network_max`), 0) AS `Network_Max`,\
         				ROUND(MIN(`DailyView`.`network_min`), 0) AS `Network_Min`,\
