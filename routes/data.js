@@ -68,7 +68,7 @@ router.post('/reportview', function(req, res, next){
         				ROUND(MAX(`DailyView`.`network_max`), 0) AS `Network_Max`,\
         				ROUND(MIN(`DailyView`.`network_min`), 0) AS `Network_Min`,\
         				SUM(IF(ISNULL(`DailyView`.`network_avg`), 0, 1)) AS `Number_of_days_NETWORK`,\
-        				((SUM(IFNULL(`DailyView`.`network_avg`, 0)) * 288) * 300) AS `Accumulate_NETWORK`\
+        				(ROUND(AVG(`DailyView`.`network_avg`), 0) * 288 * 300) AS `Accumulate_NETWORK`\
     					FROM \
         					`DailyView`\
     					WHERE "
