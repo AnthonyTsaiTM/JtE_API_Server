@@ -59,16 +59,16 @@ router.post('/reportview', function(req, res, next){
         				ROUND((AVG(`DailyView`.`mem_avg`)), 2) AS `Mem_Avg`,\
         				ROUND((MAX(`DailyView`.`mem_max`)), 2) AS `Mem_Max`,\
         				ROUND((MIN(`DailyView`.`mem_min`)), 2) AS `Mem_Min`,\
-        				ROUND(AVG(`DailyView`.`disk_avg`), 0) AS `Disk_Avg`,\
-        				ROUND(MAX(`DailyView`.`disk_max`), 0) AS `Disk_Max`,\
-        				ROUND(MIN(`DailyView`.`disk_min`), 0) AS `Disk_Min`,\
+        				ROUND(AVG(`DailyView`.`disk_avg`), 2) AS `Disk_Avg`,\
+        				ROUND(MAX(`DailyView`.`disk_max`), 2) AS `Disk_Max`,\
+        				ROUND(MIN(`DailyView`.`disk_min`), 2) AS `Disk_Min`,\
         				SUM(IF(ISNULL(`DailyView`.`disk_avg`), 0, 1)) AS `Number_of_days_DISK`,\
         				((SUM(IFNULL(`DailyView`.`disk_avg`, 0)) * 288) * 300) AS `Accumulate_DISK`,\
-        				ROUND(AVG(`DailyView`.`network_avg`), 0) AS `Network_Avg`,\
-        				ROUND(MAX(`DailyView`.`network_max`), 0) AS `Network_Max`,\
-        				ROUND(MIN(`DailyView`.`network_min`), 0) AS `Network_Min`,\
+        				ROUND(AVG(`DailyView`.`network_avg`), 2) AS `Network_Avg`,\
+        				ROUND(MAX(`DailyView`.`network_max`), 2) AS `Network_Max`,\
+        				ROUND(MIN(`DailyView`.`network_min`), 2) AS `Network_Min`,\
         				SUM(IF(ISNULL(`DailyView`.`network_avg`), 0, 1)) AS `Number_of_days_NETWORK`,\
-        				(ROUND(AVG(`DailyView`.`network_avg`), 0) * 288 * 300) AS `Accumulate_NETWORK`\
+        				(ROUND(AVG(`DailyView`.`network_avg`), 2) * 288 * 300) AS `Accumulate_NETWORK`\
     					FROM \
         					`DailyView`\
     					WHERE "
