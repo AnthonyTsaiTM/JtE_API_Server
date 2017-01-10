@@ -56,9 +56,9 @@ router.post('/reportview', function(req, res, next){
         				ROUND(((SUM(`DailyView`.`mem_25`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_LESSTHAN_25`,\
         				ROUND(((SUM(`DailyView`.`mem_75`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_BETWEEN25TO75`,\
         				ROUND(((SUM(`DailyView`.`mem_100`) / SUM(`DailyView`.`mem_total`)) * 100), 2) AS `Mem_MORETHAN75`,\
-        				ROUND((AVG(`DailyView`.`mem_avg`) * 100), 2) AS `Mem_Avg`,\
-        				ROUND((MAX(`DailyView`.`mem_max`) * 100), 2) AS `Mem_Max`,\
-        				ROUND((MIN(`DailyView`.`mem_min`) * 100), 2) AS `Mem_Min`,\
+        				ROUND((AVG(`DailyView`.`mem_avg`)), 2) AS `Mem_Avg`,\
+        				ROUND((MAX(`DailyView`.`mem_max`)), 2) AS `Mem_Max`,\
+        				ROUND((MIN(`DailyView`.`mem_min`)), 2) AS `Mem_Min`,\
         				ROUND(AVG(`DailyView`.`disk_avg`), 0) AS `Disk_Avg`,\
         				ROUND(MAX(`DailyView`.`disk_max`), 0) AS `Disk_Max`,\
         				ROUND(MIN(`DailyView`.`disk_min`), 0) AS `Disk_Min`,\
