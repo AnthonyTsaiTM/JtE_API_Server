@@ -5,10 +5,10 @@ const physicalCPUandMemService = require('../business/physicalData/physicalCPUan
 
 
 
-router.post('/reportviewPhysicalCPUandMem',(req,res,next)=>{
+router.post('/reportviewPhysicalCPUandMem', function(req,res,next) {
     console.log(req.body);
     let responseData;
-    physicalCPUandMemService.fetchCPUandMemInfos(req,(data)=>{
+    physicalCPUandMemService.fetchCPUandMemInfos(req, function(data) {
       responseData = data;
       res.send(responseData);
       res.end();

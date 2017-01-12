@@ -4,7 +4,7 @@ const database = require('../../database');
 
 
 
-const fetchCPUandMemInfos = (conditions, callback)=>{
+const fetchCPUandMemInfos = function(conditions, callback) {
 
   let dateTimeConditionString = `(cpu.DATETIME BETWEEN '${conditions.startdate}' AND '${conditions.enddate}') AND 1=1`;
   let systemNamesConditionString = getConditionString(conditions.systemnames,'SYSTEMNAME');
@@ -12,33 +12,34 @@ const fetchCPUandMemInfos = (conditions, callback)=>{
   let datacentersConditionString = getConditionString(conditions.datacenters,'DATACENTER');
   let queryString = makeQueryString(dateTimeConditionString,systemNamesConditionString,statusesConditionString,datacentersConditionString);
   fetchDataFromDB(queryString,callback);
-  // console.log(`querydata, ${queryData}`);
-  // return queryData;
+
 }
 
-const getConditionString = (names, queryName)=>{
+const getConditionString = function(names, queryName) {
   console.log(names);
   return names.length == 0 || names.length == undefined? '' : `AND ${queryName} IN (` + names.map(function(n){return "'" + n + "'";}).join(',') + `)`;
 }
-const makeQueryString = (datetime,systemnames,statuses,datacenters)=>{
+const makeQueryString = function(datetime,systemnames,statuses,datacenters) {
 
   let queryString = `SELECT
 ID,MEMORYGB,HYPERVISORID,HOSTSTATUS,DATACENTER,DEFAULTIP,OS,STORAGETYPE,STATUS,SYSTEMNAME,
 FQDN,cpu.PHYSICALNAME,
 COUNT(DISTINCT cpu.DATETIME) as Number_of_Days_CPU,
-ROUND((SUM(CPU_25)/SUM(cpu.TOTAL))*100,2) as CPU_LESSTHAN25,
-ROUND((SUM(CPU_75)/SUM(cpu.TOTAL))*100,2) as CPU_BETWEEN25TO75,
-ROUND((SUM(CPU_100)/SUM(cpu.TOTAL))*100,2) as CPU_MORETHAN75,
+ROUND((SUM(CPU_25)/SUM(cpu.TOTAL)) * 100,2) as CPU_LESSTHAN25,
+ROUND((SUM(CPU_75)/SUM(cpu.TOTAL)) * 100,2) as CPU_BETWEEN25TO75,
+ROUND((SUM(CPU_100)/SUM(cpu.TOTAL)) * 100,2) as CPU_MORETHAN75,
 ROUND(MIN(cpu.MIN),2) as CPU_MIN,
 ROUND(MAX(cpu.MAX), 2) AS CPU_MAX,
 ROUND(AVG(cpu.AVG), 2) AS CPU_AVG,
 
-ROUND(((SUM(MEM_25) / SUM(mem.TOTAL)) * 100), 2) AS Mem_LESSTHAN_25,
-ROUND(((SUM(MEM_75) / SUM(mem.TOTAL)) * 100), 2) AS Mem_BETWEEN25TO75,
+ROUND(((SUM(MEM_25) / SUM(mem.TOTAL))) * 100, 2) AS Mem_LESSTHAN_25,
+ROUND(((SUM(MEM_75) / SUM(mem.TOTAL))) * 100, 2) AS Mem_BETWEEN25TO75,
 ROUND(((SUM(MEM_100) / SUM(mem.TOTAL)) * 100), 2) AS Mem_MORETHAN75,
-ROUND((AVG(mem.AVG) ), 2) AS MEM_AVG,
-ROUND((MAX(mem.MAX) ), 2) AS MEM_MAX,
-ROUND((MIN(mem.MIN) ), 2) AS MEM_MIN
+
+ROUND((AVG(mem.AVG)), 2) AS MEM_AVG,
+ROUND((MAX(mem.MAX)), 2) AS MEM_MAX,
+ROUND((MIN(mem.MIN)), 2) AS MEM_MIN
+
 
   FROM PhysicalDailyCPU cpu, PhysicalDailyMem mem,PhysicalInfo info
   WHERE cpu.PHYSICALNAME = mem.PHYSICALNAME
@@ -54,7 +55,7 @@ ROUND((MIN(mem.MIN) ), 2) AS MEM_MIN
 return queryString;
 }
 
-const fetchDataFromDB = (queryString, callback)=>{
+const fetchDataFromDB = function (queryString, callback) {
     database.queryDatabase(queryString, function(err, data){
         if (err){
             console.log(err);

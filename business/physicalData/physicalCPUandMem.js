@@ -4,14 +4,14 @@ const moment = require('moment');
 const physicalCPUandMemDAO = require('../../dataAccess/physicalData/physicalCPUandMemDAO');
 
 
-const fetchCPUandMemInfos = (req, callback) =>{
+const fetchCPUandMemInfos = function (req, callback){
   const conditions = handleInputCondtions(req.body);
 
   physicalCPUandMemDAO.fetchCPUandMemInfos(conditions,callback);
 
 }
 
-const handleInputCondtions = (reqBody) =>{
+const handleInputCondtions = function (reqBody) {
   let conditions = {};
   conditions.systemnames  = reqBody['system_names'];
   conditions.statuses = reqBody['statuses'];
